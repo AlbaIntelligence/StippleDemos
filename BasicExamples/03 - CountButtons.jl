@@ -1,18 +1,18 @@
-using Stipple
-using StippleUI
+using Revise
+using Stipple, StippleUI
 
-Base.@kwdef mutable struct SBModel <: ReactiveModel
+Base.@kwdef mutable struct CBModel <: ReactiveModel
   clicks::R{Int} = 0
   value::R{Int} = 0
 end
 
-const sb_model = Stipple.init(SBModel(), debounce = 0)
+model_cb = Stipple.init(CBModel(), debounce = 0)
 
-on(sb_model.value) do (_...)
-  sb_model.clicks[] += 1
+on(model_cb.value) do (_...)
+  model_cb.clicks[] += 1
 end
 
-function ui(model::SBModel)
+function ui(model::CBModel)
   [
   dashboard(
     vm(model), class="container", title="Buttons demo",
@@ -43,7 +43,5 @@ function ui(model::SBModel)
 end
 
 route("/") do
-  ui(sb_model) |> html
+  ui(model_cb) |> html
 end
-
-up(rand((8000:9000)), open_browser=true)

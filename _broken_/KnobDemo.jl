@@ -1,8 +1,6 @@
 using Stipple, StippleUI
 
-Base.@kwdef mutable struct KnobDemo <: ReactiveModel
-
-end
+Base.@kwdef mutable struct KnobDemo <: ReactiveModel end
 
 hs_model = Stipple.init(KnobDemo())
 

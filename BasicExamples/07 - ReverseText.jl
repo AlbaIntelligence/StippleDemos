@@ -1,3 +1,4 @@
+using Revise
 using Stipple, StippleUI
 
 Genie.Assets.assets_config!([Genie, Stipple, StippleUI],
@@ -11,19 +12,19 @@ Base.@kwdef mutable struct RTModel <: ReactiveModel
   input::R{String} = "Stipple"
 end
 
-rt_model = Stipple.init(RTModel(), transport = WEB_TRANSPORT)
+model_rt = Stipple.init(RTModel(), transport = WEB_TRANSPORT)
 
-on(rt_model.process) do _
-  if (rt_model.process[])
-    rt_model.output[] = rt_model.input[] |> reverse
-    rt_model.process[] = false
+on(model_rt.process) do _
+  if (model_rt.process[])
+    model_rt.output[] = model_rt.input[] |> reverse
+    model_rt.process[] = false
   end
 end
 
 function ui()
   [
   page(
-    vm(rt_model), class="container", title="Reverse text", [
+    vm(model_rt), class="container", title="Reverse text", [
       p([
         "Input "
         input("", @bind(:input), @on("keyup.enter", "process = true"))

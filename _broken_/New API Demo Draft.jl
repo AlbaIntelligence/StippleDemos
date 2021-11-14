@@ -43,20 +43,31 @@ Stipple.js_created(model) = raw"""
 function ui()
   [
     dashboard(
-      vm(model), class="container", title="Hello Stipple",
+      vm(model),
+      class = "container",
+      title = "Hello Stipple",
       [
-        template([
-          h1(["Hello, ", span("", @text(:name))])
-        ], v__if=:header)
-        row(cell(class="st-module", [
-          p(toggle("Camera on", fieldname = :header)),
-          p(toggle("Darkmode", :darkmode)),            
-        ]))
-        p([
-          h1("What is your name? ")
-          textfield("", :name, placeholder="type your name", label="Name", outlined="", filled="")
-        ])
-      ]
+        template([h1(["Hello, ", span("", @text(:name))])], v__if = :header)
+        row(
+          cell(
+            class = "st-module",
+            [p(toggle("Camera on", fieldname = :header)), p(toggle("Darkmode", :darkmode))],
+          ),
+        )
+        p(
+          [
+            h1("What is your name? ")
+            textfield(
+              "",
+              :name,
+              placeholder = "type your name",
+              label = "Name",
+              outlined = "",
+              filled = "",
+            )
+          ],
+        )
+      ],
     )
     css()
   ] |> html
@@ -64,7 +75,7 @@ end
 
 route("/", ui)
 
-up(open_browser=true)
+up(open_browser = true)
 
 model.js[] = js"""() => console.log("Hello")"""
 model.js[] = js"""() => console.log("World")"""

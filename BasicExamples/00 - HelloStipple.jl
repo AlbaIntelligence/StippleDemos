@@ -1,3 +1,4 @@
+using Revise
 using Stipple, StippleUI
 
 # Stipple's ReactiveModel with name field which is mapped to frontend input
@@ -6,12 +7,12 @@ Base.@kwdef mutable struct Name <: ReactiveModel
   name::R{String} = "Stipple!"
 end
 
-hs_model = Stipple.init(Name())
+model_hs = Stipple.init(Name())
 
 function ui()
   [
     page(
-      vm(hs_model), class="container", title="Hello Stipple", partial=true,
+      vm(model_hs), class="container", title="Hello Stipple", partial=true,
       [
         row(
           cell([

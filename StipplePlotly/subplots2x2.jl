@@ -1,50 +1,55 @@
-using Genie, Genie.Renderer.Html, Stipple, StipplePlotly
+using Genie, Genie.Renderer.Html
+using PlotlyJS
+using Stipple, StipplePlotly
 
-Genie.config.log_requests = false
+import StipplePlotly: PlotData, PlotDataMarker, PlotlyLine, PlotLayoutTitle, PlotLayout, PlotLayoutAxis, PlotLayoutGrid, PlotConfig
 
-xx = -π:(2π/250):π
+import StipplePlotly.Charts: PLOT_TYPE_SCATTER
 
-xxs = -3.0:0.2:3.0
+# Genie.config.log_requests = false
 
 # Data:
 
+xx = -π:(2π/250):π
+xxs = -3.0:0.2:3.0
+
 pl1 = PlotData(
-    x = xx, y = sin.(xx), plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xx, y = sin.(xx), plot = PLOT_TYPE_SCATTER,
     name = "sine", mode = "lines", xaxis = "x", yaxis = "y", line = PlotlyLine(color = "rgb(0,0,192)", dash="solid")
 )
 
 pl2 = PlotData(
-    x = xx, y = sinh.(xx), plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xx, y = sinh.(xx), plot = PLOT_TYPE_SCATTER,
     name = "sinh", mode = "lines", xaxis = "x2", yaxis = "y2", line = PlotlyLine(color = "rgb(0,192,0)", dash="dot")
 )
 
 pl3 = PlotData(
-    x = xx, y = cos.(xx), plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xx, y = cos.(xx), plot = PLOT_TYPE_SCATTER,
     name = "cosine", mode = "lines", xaxis = "x3", yaxis = "y3", line = PlotlyLine(color = "rgb(192,0,0)", dash="dash")
 )
 
 pl4 = PlotData(
-    x = xx, y = cosh.(xx), plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xx, y = cosh.(xx), plot = PLOT_TYPE_SCATTER,
     name = "cosh", mode = "lines", xaxis = "x4", yaxis = "y4", line = PlotlyLine(color = "rgb(192,0,192)", dash="dashdot")
 )
 
 ps1 = PlotData(
-    x = xxs, y = sin.(xxs) .+ rand(Float64, size(xxs)) .- 0.5, plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xxs, y = sin.(xxs) .+ rand(Float64, size(xxs)) .- 0.5, plot = PLOT_TYPE_SCATTER,
     name = "sine", mode = "markers", xaxis = "x", yaxis = "y", marker = PlotDataMarker(color="rgb(0,0,192)", symbol="circle", size=10, opacity=0.5)
 )
 
 ps2 = PlotData(
-    x = xxs, y = sinh.(xxs) .+ 3.0 .* rand(Float64, size(xxs)) .- 1.5, plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xxs, y = sinh.(xxs) .+ 3.0 .* rand(Float64, size(xxs)) .- 1.5, plot = PLOT_TYPE_SCATTER,
     name = "sinh", mode = "markers", xaxis = "x2", yaxis = "y2", marker = PlotDataMarker(color = "rgb(0,192,0)", symbol="circle-open", size=14)
 )
 
 ps3 = PlotData(
-    x = xxs, y = cos.(xxs) .+ rand(Float64, size(xxs)) .- 0.5, plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xxs, y = cos.(xxs) .+ rand(Float64, size(xxs)) .- 0.5, plot = PLOT_TYPE_SCATTER,
     name = "cosine", mode = "markers", xaxis = "x3", yaxis = "y3", marker = PlotDataMarker(color = "rgb(192,0,0)", symbol="diamond", size=10, opacity=0.5)
 )
 
 ps4 = PlotData(
-    x = xxs, y = cosh.(xxs) .+ 3.0 .* rand(Float64, size(xxs)) .- 1.5, plot = StipplePlotly.Charts.PLOT_TYPE_SCATTER,
+    x = xxs, y = cosh.(xxs) .+ 3.0 .* rand(Float64, size(xxs)) .- 1.5, plot = PLOT_TYPE_SCATTER,
     name = "cosh", mode = "markers", xaxis = "x4", yaxis = "y4", marker = PlotDataMarker(color = "rgb(192,0,192)", symbol="diamond-open", size=3)
 )
 
@@ -70,17 +75,17 @@ layout = PlotLayout(
     ],
 )
 
-Base.@kwdef mutable struct Model <: ReactiveModel
+Base.@kwdef mutable struct SubPlotModel <: ReactiveModel
   data::R{Vector{PlotData}} = plotdata, READONLY
   layout::R{PlotLayout} = layout, READONLY
   config::R{PlotConfig} = PlotConfig(), READONLY
 end
 
-model = Stipple.init(Model())
+model_sb = Stipple.init(SubPlotModel())
 
 function ui()
   page(
-    vm(model), class="container", [
+    vm(model_sb), class="container", [
         plot(:data, layout = :layout, config = :config)
     ]
   ) |> html
@@ -88,4 +93,3 @@ end
 
 route("/", ui)
 
-up()

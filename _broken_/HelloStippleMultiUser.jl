@@ -20,19 +20,22 @@ function ui()
 
   [
     page(
-      vm(hs_model), class="container", title="Hello Stipple", partial=true, channel=channel,
+      vm(hs_model),
+      class = "container",
+      title = "Hello Stipple",
+      partial = true,
+      channel = channel,
       [
         h1([
           "Hello, "
           span("", @text(:name))
         ])
-
         p([
           "What is your name? "
-          input("", placeholder="Type your name", @bind(:name))
+          input("", placeholder = "Type your name", @bind(:name))
         ])
-      ]
-    )
+      ],
+    ),
   ] |> html
 end
 
@@ -42,4 +45,4 @@ end
 
 route("/dashboards/:session_id", ui)
 
-up(rand((8000:9000)), open_browser=true)
+up(rand((8000:9000)), open_browser = true)

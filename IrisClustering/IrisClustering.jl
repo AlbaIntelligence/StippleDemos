@@ -1,10 +1,10 @@
-using Stipple
-using StippleUI
-using StippleCharts
-
-using Clustering
 import RDatasets: dataset
 import DataFrames
+
+using Stipple, StippleUI, StippleCharts
+
+using Clustering
+
 
 Genie.Assets.assets_config!([Genie, Stipple, StippleUI, StippleCharts],
                             host = "https://cdn.statically.io/gh/GenieFramework")

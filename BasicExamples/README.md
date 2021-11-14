@@ -8,23 +8,23 @@ julia> #enter package mode with ]
 (@v1.x) pkg> instantiate
 (@v1.x) pkg> #exit package mode with <backspace key>
 julia> include("Form.jl")
-julia> up(rand((8000:9000)), open_browser=true)  # should open your default browser and fire up Genie server at port between `8000:9000`
+julia> up(rand(8400:8700), open_browser=true)  # should open your default browser and fire up Genie server at port between `8000:9000`. add `async=true` for an async server.
 julia> down() # stop the running async instance of Genie Server
 ```
 
-> If you want to change code and want JULIA to automatically reflect changes in Web Page use `Revise`. `Revise` is already included in `Project.toml`. Change `your code` hit save in editor and refresh browser should reflect your changes 
+> If you want to change code and want JULIA to automatically reflect changes in Web Page use `Revise`. `Revise` is already included in `Project.toml`. Change `your code` hit save in editor and refresh browser should reflect your changes
 ### How  to use Revise?
 ```julia
 ---- same as above -----
 (@v1.x) pkg> add Revise
 (@v1.x) pkg> #exit package mode with <backspace key>
 julia> using Revise
-julia> includet("Form.jl")  # notice we are using **includet** from revise instead of include
+julia> include("Form.jl")  # notice we are using **includet** from revise instead of include
 julia> up(rand((8000:9000)), open_browser=true)  # should open your default browser and fire up Genie server at port between `8000:9000`
 julia> down() # stop the running async instance of Genie Server
 ```
 
-### Form Compontent
+### Form Component
 
 | Components              | Demo                               |
 |-------------------------|------------------------------------|
@@ -33,3 +33,4 @@ julia> down() # stop the running async instance of Genie Server
 | **Form Component**      | ![Form](docs/content/img/Form.png) |
 | **Hello Pie**           | ![Form](docs/content/img/HelloPie.png)  |
 | **Hello Stipple**       | ![Form](docs/content/img/HelloStipple.png) |
+
