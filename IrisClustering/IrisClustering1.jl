@@ -1,4 +1,3 @@
-
 pwd()
 cd("IrisClustering")
 pwd()
@@ -6,14 +5,17 @@ pwd()
 using Pkg; Pkg.activate(".")
 
 using Revise
+
+using Genie, Genie.Renderer.Html
 using Stipple, StippleUI, StippleCharts
 
 #= Data =#
 
-Base.@kwdef mutable struct IrisModel <: ReactiveModel end
+Base.@kwdef mutable struct IrisModel_1 <: ReactiveModel end
 
 #= Stipple setup =#
 
+Stipple.register_components(IrisModel_1, StippleCharts.COMPONENTS)
 model_iris = Stipple.init(IrisModel())
 
 #= UI =#
@@ -50,7 +52,7 @@ end
 #= routing =#
 
 route("/") do
-  ui(model_iris) |> html
+  ui(model_iris) |> Genie.Renderer.Html.html
 end
 
 #= start server =#

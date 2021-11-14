@@ -1,5 +1,12 @@
 using Revise
 
+pwd()
+cd("IrisClustering")
+pwd()
+
+using Pkg; Pkg.activate(".")
+
+using Genie, Genie.Renderer.Html
 using Stipple, StippleUI, StippleCharts
 
 using Clustering
@@ -10,7 +17,7 @@ import DataFrames
 
 data = DataFrames.insertcols!(dataset("datasets", "iris"), :Cluster => zeros(Int, 150))
 
-Base.@kwdef mutable struct IrisModel <: ReactiveModel
+Base.@kwdef mutable struct IrisModel_2 <: ReactiveModel
   iris_data::R{DataTable} = DataTable(data)
   credit_data_pagination::DataTablePagination = DataTablePagination(rows_per_page = 50)
 
@@ -26,14 +33,15 @@ Base.@kwdef mutable struct IrisModel <: ReactiveModel
   no_of_iterations::R{Int} = 10
 end
 
+
 #= Stipple setup =#
 
-Stipple.register_components(IrisModel, StippleCharts.COMPONENTS)
-const ic_model = Stipple.init(IrisModel())
+Stipple.register_components(IrisModel_2, StippleCharts.COMPONENTS)
+model_ir2 = Stipple.init(IrisModel_2())
 
 #= UI =#
 
-function ui(model::IrisModel)
+function ui(model::IrisModel_2)
   [
     dashboard(
       vm(model),
@@ -121,7 +129,7 @@ end
 #= routing =#
 
 route("/") do
-  ui(ic_model) |> html
+  ui(ic_model) |> Genie.Renderer.Html.html
 end
 
 #= start server =#
