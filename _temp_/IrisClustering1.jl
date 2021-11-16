@@ -16,6 +16,7 @@ Base.@kwdef mutable struct IrisModel <: ReactiveModel end
 
 model_iris = Stipple.init(IrisModel())
 
+
 #= UI =#
 
 function ui(model::IrisModel)
@@ -47,11 +48,13 @@ function ui(model::IrisModel)
   ]
 end
 
+
 #= routing =#
 
 route("/") do
   ui(model_iris) |> html
 end
+
 
 #= start server =#
 

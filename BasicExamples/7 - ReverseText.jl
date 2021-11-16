@@ -4,15 +4,13 @@ using Stipple, StippleUI
 Genie.Assets.assets_config!([Genie, Stipple, StippleUI],
                             host = "https://cdn.statically.io/gh/GenieFramework")
 
-WEB_TRANSPORT = Genie.WebChannels #Genie.WebThreads #
-
 Base.@kwdef mutable struct RTModel <: ReactiveModel
   process::R{Bool} = false
   output::R{String} = ""
   input::R{String} = "Stipple"
 end
 
-model_rt = Stipple.init(RTModel(), transport = WEB_TRANSPORT)
+model_rt = Stipple.init(RTModel(); transport = Genie.WebChannels)  # Genie.WebThreads
 
 on(model_rt.process) do _
   if (model_rt.process[])

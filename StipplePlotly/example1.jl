@@ -8,8 +8,6 @@ using Stipple, StippleUI, StipplePlotly
 #   m.assets_config.host = "https://cdn.statically.io/gh/GenieFramework"
 # end
 
-# WEB_TRANSPORT = Genie.WebChannels #Genie.WebThreads #
-
 
 #== data ==#
 
@@ -43,7 +41,7 @@ Base.@kwdef mutable struct Model_Ex1 <: ReactiveModel
   config::R{StipplePlotly.PlotConfig} = StipplePlotly.PlotConfig()
 end
 
-model_ex1 = Stipple.init(Model_Ex1())
+model_ex1 = Stipple.init(Model_Ex1(); transport = Genie.WebChannels)
 
 #== ui ==#
 

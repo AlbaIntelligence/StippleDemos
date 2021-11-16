@@ -1,5 +1,34 @@
+#
+# The demos are to be run in their own directory from the REPL
+#
+
+# To check you are at the right place
+pwd()
+cd("BasicExamples")
+pwd()
+
+# Use the local Project.toml
+using Pkg
+Pkg.activate(".")
+
+# Use the latest versions of the necessary packages
+Pkg.develop("Genie")
+Pkg.develop("Stipple")
+Pkg.develop("StippleUI")
+# Pkg.develop("StippleCharts")
+
 using Revise
-using Genie, Stipple, StippleUI
+
+using Genie, Genie.Renderer.Html
+using Stipple
+using StippleUI
+# using StippleCharts
+
+# Note that the use of the packages is fully qualified in the code below to be explicit
+# where the functions come from. The qualifications are not necessary otherwise.
+
+
+#= Data =#
 
 # CardDemo definition inheriting from ReactiveModel
 # Base.@kwdef: that defines keyword based contructor of mutable struct
@@ -48,3 +77,13 @@ function ui()
 end
 
 route("/", ui)
+
+route("/hello") do
+  "Welcome"
+end
+
+#= start server =#
+
+# Starts a server with a random port between 8400 and 8700
+# This avoids conflicts with other commonly used ports such as 8000, 8080, 9000+
+up(rand(8400:8700), "localhost"; open_browser = true, async = true)

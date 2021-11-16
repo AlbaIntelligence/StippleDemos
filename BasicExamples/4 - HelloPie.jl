@@ -47,10 +47,10 @@ function random_color()::String
   string(rand(0:255), base = 16) |> uppercase
 end
 
-function ui()
+function ui(model::HelloPie)
   [
     Stipple.page(
-      Stipple.vm(model_hp),
+      Stipple.vm(model),
       class = "container",
       title = "Hello Pie",
       partial = true,
@@ -88,6 +88,6 @@ function ui()
   ] |> html
 end
 
-route("/", ui)
+route("/", ui(model_hp))
 
 

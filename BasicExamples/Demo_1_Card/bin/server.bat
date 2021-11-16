@@ -1,0 +1,1 @@
+"/home/emmanuel/Development/_langs/julia/versions/julia-1.7.0-rc2/bin/julia" --color=yes --depwarn=no --project=@. -q -i -- "%~dp0..\bootstrap.jl" s %*

@@ -6,7 +6,7 @@ Base.@kwdef mutable struct CBModel <: ReactiveModel
   value::R{Int} = 0
 end
 
-model_cb = Stipple.init(CBModel(), debounce = 0)
+model_cb = Stipple.init(CBModel(); debounce = 0)
 
 on(model_cb.value) do (_...)
   model_cb.clicks[] += 1
@@ -15,7 +15,10 @@ end
 function ui(model::CBModel)
   [
   dashboard(
-    vm(model), class="container", title="Buttons demo",
+    vm(model),
+    class="container",
+    title="Buttons demo",
+
     [
       heading("Buttons")
 

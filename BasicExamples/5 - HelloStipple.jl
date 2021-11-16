@@ -7,12 +7,13 @@ Base.@kwdef mutable struct Name <: ReactiveModel
   name::R{String} = "Stipple!"
 end
 
-model_hs = Stipple.init(Name())
+# This model is used as a global variable
+model_name = Stipple.init(Name())
 
 function ui()
   [
     page(
-      vm(model_hs), class="container", title="Hello Stipple", partial=true,
+      vm(model_name), class="container", title="Hello Stipple", partial=true,
       [
         row(
           cell([

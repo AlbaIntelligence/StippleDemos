@@ -1,23 +1,39 @@
-using Revise
+#
+# The demos are to be run in their own directory from the REPL
+#
 
+# To check you are at the right place
 pwd()
 cd("IrisClustering")
 pwd()
 
-using Pkg; Pkg.activate(".")
+# Use the local Project.toml
+using Pkg
+Pkg.activate(".")
+
+# Use the latest versions of the necessary packages
+Pkg.develop("Genie")
+Pkg.develop("Stipple")
+Pkg.develop("StippleUI")
+# Pkg.develop("StippleCharts")
+
+using Revise
 
 using Genie, Genie.Renderer.Html
-using Stipple, StippleUI, StippleCharts
+using Stipple
+using StippleUI
+# using StippleCharts
 
 using Clustering
 import RDatasets: dataset
 import DataFrames
 
+
 #= Data =#
 
 data = DataFrames.insertcols!(dataset("datasets", "iris"), :Cluster => zeros(Int, 150))
 
-Base.@kwdef mutable struct IrisModel_2 <: ReactiveModel
+Base.@kwdef mutable struct IrisModel_3 <: ReactiveModel
   iris_data::R{DataTable} = DataTable(data)
   credit_data_pagination::DataTablePagination = DataTablePagination(rows_per_page = 50)
 
@@ -33,15 +49,57 @@ Base.@kwdef mutable struct IrisModel_2 <: ReactiveModel
   no_of_iterations::R{Int} = 10
 end
 
-
 #= Stipple setup =#
 
-Stipple.register_components(IrisModel_2, StippleCharts.COMPONENTS)
-model_ir2 = Stipple.init(IrisModel_2())
+Stipple.register_components(IrisModel_3, StippleCharts.COMPONENTS)
+const ic_model = Stipple.init(IrisModel_3())
+
+#= Event handlers =#
+
+onany(
+  ic_model.xfeature,
+  ic_model.yfeature,
+  ic_model.no_of_clusters,
+  ic_model.no_of_iterations,
+) do (_...)
+  ic_model.iris_plot_data[] = plot_data(:Species)
+  compute_clusters!()
+end
+
+#= Computation =#
+
+function plot_data(cluster_column::Symbol)
+  result = Vector{PlotSeries}()
+  isempty(ic_model.xfeature[]) || isempty(ic_model.yfeature[]) && return result
+
+  dimensions = Dict()
+  for s in Array(data[:, cluster_column]) |> unique!
+    dimensions[s] = []
+
+    for r in eachrow(data[data[cluster_column].==s, :])
+      push!(dimensions[s], [r[Symbol(ic_model.xfeature[])], r[Symbol(ic_model.yfeature[])]])
+    end
+
+    push!(result, PlotSeries("$s", PlotData(dimensions[s])))
+  end
+
+  result
+end
+
+function compute_clusters!()
+  features = collect(Matrix(data[:, [Symbol(c) for c in ic_model.features[]]])')
+  result =
+    kmeans(features, ic_model.no_of_clusters[]; maxiter = ic_model.no_of_iterations[])
+  data[:Cluster] = assignments(result)
+  ic_model.iris_data[] = DataTable(data)
+  ic_model.cluster_plot_data[] = plot_data(:Cluster)
+
+  nothing
+end
 
 #= UI =#
 
-function ui(model::IrisModel_2)
+function ui(model::IrisModel_3)
   [
     dashboard(
       vm(model),
@@ -63,13 +121,7 @@ function ui(model::IrisModel_2)
               class = "st-module",
               [
                 h6("Number of iterations")
-                slider(
-                  10:10:200,
-                  @data(:no_of_iterations);
-                  label = true,
-                  color = "red",
-                  label__color = "green",
-                )
+                slider(10:10:200, @data(:no_of_iterations); label = true)
               ],
             )
             cell(
@@ -129,7 +181,7 @@ end
 #= routing =#
 
 route("/") do
-  ui(ic_model) |> Genie.Renderer.Html.html
+  ui(ic_model) |> html
 end
 
 #= start server =#
