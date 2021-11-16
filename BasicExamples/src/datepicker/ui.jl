@@ -1,27 +1,7 @@
-using Stipple, StippleUI
-
-
-# R{Date}, R{Vector{DateRange}} etc are type Observable and you can listen for changes
-# https://juliagizmos.github.io/Observables.jl/stable/
-Base.@kwdef mutable struct DatePickers <: ReactiveModel
-  date::R{Date} = today() + Day(30)
-  dates::R{Vector{Date}} = Date[today()+Day(10), today()+Day(20), today()+Day(30)]
-  daterange::R{DateRange} = DateRange(today(), (today() + Day(3)))
-  dateranges::R{Vector{DateRange}} = [
-    DateRange(today(), (today() + Day(3))),
-    DateRange(today() + Day(7), (today() + Day(10))),
-    DateRange(today() + Day(14), (today() + Day(17))),
-  ]
-  proxydate::R{Date} = today()
-  inputdate::R{Date} = today()
-end
-
-model_dp = Stipple.init(DatePickers())
-
-function ui()
+function ui(model::DatePickers)
   [
     page(
-      vm(model_dp),
+      vm(model),
       class = "container",
       title = "DatePickers Demo",
       partial = true,
@@ -30,15 +10,9 @@ function ui()
         row(cell([h1("Date pickers")]))
         row(
           [
-            # refers to line 7 date::R{Date}
             cell([datepicker(:date),])
-
-            # :dates is mapped to line 8 Stipple's ReactiveModel
             cell([datepicker(:dates, multiple = true), ])
-
-            # :daterange -> daterange::R{DateRange} line 9
             cell([datepicker(:daterange, range = true), ])
-
             cell([datepicker(:dateranges, range = true, multiple = true)])
           ],
         )
@@ -126,7 +100,5 @@ function ui()
         )
       ],
     ),
-  ] |> html
+  ]
 end
-
-route("/", ui)

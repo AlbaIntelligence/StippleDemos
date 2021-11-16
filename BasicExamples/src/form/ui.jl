@@ -1,23 +1,40 @@
-# this example was written by @hhaensel (see
-# [here](https://github.com/GenieFramework/Stipple.jl/issues/57#issuecomment-862641950))
+Stipple.client_data(m::FormComponent) =
+  client_data(client_name = js"null", client_age = js"null", accept = false)
 
-using Revise
-using Genie, Stipple, StippleUI
+
+# $-values are linked to the use of Quasar
+# defines javascript code block without interpolation and unescaping
+Stipple.js_methods(m::FormComponent) = raw"""
+    onSubmit () {
+      if (this.accept !== true) {
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'warning',
+          message: 'You need to accept the license and terms first'
+        })
+      }
+      else {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Submitted'
+        });
+        this.name = this.client_name;
+        this.age = this.client_age;
+      }
+    },
+    onReset () {
+      console.log(this.client_name)  // Hit F12 open console and you should see name
+      console.log(this.client_age)  // Hit F12 open console tab and you should see age
+      this.client_name = null
+      this.client_age = null
+      this.accept = false
+    }
+  """
 
 NO = StippleUI.NO_WRAPPER # NO_WRAPPER is anonymous function f->f()
-
-# name, age are type Observable
-Stipple.@kwdef mutable struct FormComponent <: ReactiveModel
-  name::R{String} = ""
-  age::R{Int} = 0
-  objects::R{Vector{String}} = ["Dog", "Cat", "Beer"]
-  warin::R{Bool} = true
-end
-
-# passing FormComponent object(contruction) for 2-way integration between Julia
-# and JavaScript returns {ReactiveModel}
-model_fc = Stipple.init(FormComponent())
-
 
 myform() = xelem(
   :div,
@@ -82,45 +99,10 @@ myform() = xelem(
 # v-model is @bind
 
 
-# $-values are linked to the use of Quasar
-# defines javascript code block without interpolation and unescaping
-Stipple.js_methods(m::FormComponent) = raw"""
-    onSubmit () {
-      if (this.accept !== true) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'You need to accept the license and terms first'
-        })
-      }
-      else {
-        this.$q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Submitted'
-        });
-        this.name = this.client_name;
-        this.age = this.client_age;
-      }
-    },
-    onReset () {
-      console.log(this.client_name)  // Hit F12 open console and you should see name
-      console.log(this.client_age)  // Hit F12 open console tab and you should see age
-      this.client_name = null
-      this.client_age = null
-      this.accept = false
-    }
-  """
 
-Stipple.client_data(m::FormComponent) =
-  client_data(client_name = js"null", client_age = js"null", accept = false)
-
-function ui()
-  page(vm(model_fc), class = "container", title = "Hello Stipple", myform())
+function ui(model::FormComponent)
+  page(vm(model),
+  class = "container",
+  title = "Hello Stipple",
+  myform())
 end
-
-# Using Genie Route to serve ui
-route("/", ui)
-
