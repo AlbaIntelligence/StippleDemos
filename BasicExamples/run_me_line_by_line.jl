@@ -1,4 +1,3 @@
-
 # Those lines are to make sure that the current path is in the package
 pwd()
 cd("BasicExamples")
@@ -28,4 +27,4 @@ BasicExamples.main()
 # Create a server presenting the card
 # top webpage is a welcome page
 # the demos are on separate addresses given by their respective routes
-BasicExamples_server = create_server(; async = true, verbose=true, open_browser = true)
+BasicExamples_server = BasicExamples.create_server(; async = true, verbose=true, open_browser = true)
