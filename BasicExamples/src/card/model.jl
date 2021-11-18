@@ -2,3 +2,5 @@
 # Base.@kwdef: that defines keyword based contructor of mutable struct
 Base.@kwdef mutable struct CardDemo <: Stipple.ReactiveModel end
 
+model_card = Stipple.init(CardDemo())
+

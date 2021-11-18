@@ -1,4 +1,10 @@
 route("/countbutton") do
-  model_cb |> ui |> html
+  model_countbutton |> ui |> html
 end
+
+println("""
+        Countbutton routes:
+        $(Genie.Router.named_routes())
+        -----------------------------------------------------------
+        """)
 

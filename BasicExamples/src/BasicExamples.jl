@@ -8,16 +8,6 @@ using Genie, Genie.Router
 using Stipple, StippleUI, StippleCharts
 
 
-function main()
-  Core.eval(Main, :(const UserApp = $(@__MODULE__)))
-
-  Genie.genie(; context = @__MODULE__)
-
-  Core.eval(Main, :(const Genie = UserApp.Genie))
-  Core.eval(Main, :(using Genie))
-end
-
-
 # NOTE:
 # The order of the includes is something to be aware of.
 # The routes are added incrementally. When determining how to dispatch a particular route,
@@ -61,6 +51,16 @@ include("countbutton/model.jl")
 include("countbutton/ui.jl")
 include("countbutton/route.jl")
 
+
+function main()
+  Core.eval(Main, :(const UserApp = $(@__MODULE__)))
+
+  Genie.genie(; context = @__MODULE__)
+
+  Core.eval(Main, :(const Genie = UserApp.Genie))
+  Core.eval(Main, :(using Genie))
+end
+
 #= Create server =#
 
 function create_server(;
@@ -84,5 +84,10 @@ function create_server(;
     open_browser = open_browser
   )
 end
+
+# main()
+export BasicExamples_server
+BasicExamples_server = create_server(; async = true, verbose=true, open_browser = true)
+
 
 end # module

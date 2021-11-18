@@ -1,7 +1,7 @@
-# Those lines are to make sure that the current path is in the package
-pwd()
-cd("BasicExamples")
-pwd()
+# Those lines are to visually confirm that the the package/module is in the current path
+# pwd()
+# cd("BasicExamples")
+# pwd()
 
 using Pkg
 Pkg.activate(".")
@@ -19,12 +19,18 @@ using Stipple
 using StippleUI
 using StippleCharts
 
+
+
+
+# Confirm to Julia to show any problems when loading the module defining model
+# push!(Base.modules_warned_for, Base.PkgId(BasicExamples))
+
 using BasicExamples
-push!(Base.modules_warned_for, Base.PkgId(BasicExamples))
-BasicExamples.main()
+
+# BasicExamples.main()
 
 
 # Create a server presenting the card
 # top webpage is a welcome page
 # the demos are on separate addresses given by their respective routes
-BasicExamples_server = BasicExamples.create_server(; async = true, verbose=true, open_browser = true)
+# BasicExamples_server = BasicExamples.create_server(; async = true, verbose=true, open_browser = true)

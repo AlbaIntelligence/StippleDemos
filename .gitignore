@@ -1,4 +1,12 @@
+# MacOS
 .DS_Store
+
+# Editors
+.vscode
+
+# Julia
 Manifest.toml
+build
+
+# Outputs
 StippleDemo.mp4
-.DS_Store

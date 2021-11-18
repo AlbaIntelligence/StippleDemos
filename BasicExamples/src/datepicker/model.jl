@@ -13,3 +13,4 @@ Base.@kwdef mutable struct DatePickers <: ReactiveModel
   ]
 end
 
+model_date_picker = Stipple.init(DatePickers())
